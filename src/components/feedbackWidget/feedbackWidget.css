@@ -1,0 +1,210 @@
+:host { 
+  display: inline-block;
+}
+
+
+.container { 
+  font-family: "Source Sans 3";
+  border-radius: 10px;
+  box-shadow: 0 0 10px 5px rgba(41,41,42,.07);
+  display: flex;
+  flex-direction: column;
+  max-height: 664px;
+  max-width: 304px;
+  min-width: 304px;
+  padding: 16px;
+  width: unset;
+  gap: 10px;
+
+  & .top__wrapper { 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & .progress-bar { 
+      width: 90%;
+      background-color: #ddd;
+      border-radius: 4px;
+      
+      & .progress__bar-fill { 
+        border-radius: 4px;
+        --progress-width: 1%; /* Initial width */
+        width: var(--progress-width);
+        /* width: 1%; */
+        height: 5px;
+        background-color: #04AA6D;
+      }
+    }
+
+    /* & .heading-label { 
+      font-weight: bold;
+      font-size: 19px;
+    } */
+
+    &.hide { 
+      justify-content: flex-end;
+      & .progress-bar { 
+        display: none;
+      }
+    }
+
+    & .close-button { 
+      cursor: pointer;
+      line-height: 12px;
+    }
+
+    & .close-button  { 
+      & svg { 
+        color: #b3b3b3;
+
+        &:hover { 
+          color: black;
+        }
+      }
+    }
+  }
+
+  & .bottom__wrapper {
+    & .phase__one { 
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  
+      &.hide { 
+        display: none;
+      }
+
+      & .question-label { 
+        font-family: "Source Sans 3";
+        font-weight: 600;
+        color: #29292A;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+      }
+  
+      & .rating-emojis { 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+      }
+  
+      & .rating-emojis  { 
+        & img { 
+          transition: width .2s;
+          width: 35px;
+  
+          &:hover { 
+            transition: width .2s ;
+            cursor: pointer;
+            width: 40px;
+          }
+        }
+      }
+  
+      & .rating-label { 
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+      }
+    }
+
+    & .phase__two { 
+      display: none;
+      &.show { 
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        & .text__input  {
+          & textarea { 
+            font-family: "Source Sans 3";
+            box-sizing: border-box;
+            border-color: rgba(0,0,0,0);
+            border-radius: 6px;
+            border-style: solid;
+            border-width: 2px;
+            font-size: 14px;
+            /* margin-bottom: 16px; */
+            max-height: 200px;
+            min-height: 80px;
+            /* padding: 8px; */
+            resize: none;
+            width: 100%;
+            background-color: rgba(127, 140, 141, 0.1);
+            color: black;
+            outline-color: #7F8C8D;
+          }
+
+          & .hint__text { 
+            color: #7F8C8D;
+            font-size: 12px;
+            line-height: 20px;
+            /* margin-bottom: 8px; */
+            margin: 0;
+            margin-bottom: 8px;
+            & p { 
+              margin: 0;
+              
+            }
+          }
+        }
+
+        & .submit__button { 
+          border-top-style: solid;
+          border-top-width: 1px;
+          border-top-color: rgba(41, 41, 42, 0.2);
+          padding-top: 15px;
+          width: 100%;
+
+          & button { 
+            display: flex;
+            align-items: center;
+            border-bottom-width: 0;
+            border-radius: 4px;
+            border-style: none none solid none;
+            font-weight: 600;
+            height: auto;
+            justify-content: center;
+            margin: auto;
+            min-height: 40px;
+            outline-offset: 3px;
+            overflow-wrap: break-word;
+            width: 100%;
+            background-color: #BFBBBB;
+            color: #000000;
+          }
+
+          &.active { 
+            & button { 
+              cursor: pointer;
+              background-color: #0A8276;
+              color: #FFF;
+              &:hover { 
+                background-color: #08665C;
+              }
+
+              &:active { 
+                background-color: #06534B;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    & .phase__end { 
+      display: none;
+      &.show { 
+        display: flex;
+        min-height: 80px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+  }
+
+
+}

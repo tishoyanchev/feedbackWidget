@@ -9,6 +9,13 @@ export const config: Config = {
     },
     {
       type: 'dist-custom-elements',
+      copy: [
+        {
+          src: '**/*.{jpg,png}',
+          dest: 'dist/components/assets',
+          warn: true,
+        }
+      ]
     },
     {
       type: 'docs-readme',
@@ -17,6 +24,7 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null, // disable service workers
     },
+    
   ],
   testing: {
     browserHeadless: "new",
