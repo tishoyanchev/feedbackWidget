@@ -1,6 +1,10 @@
 {
   "name": "infineon-feedback",
+<<<<<<< HEAD
   "version": "0.0.2",
+=======
+  "version": "0.0.1",
+>>>>>>> edc0a71669358fb5b6a92595ac5f5ae4d1537d27
   "description": "Stencil Component Starter",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
