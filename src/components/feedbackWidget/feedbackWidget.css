@@ -1,9 +1,49 @@
 :host { 
   display: inline-block;
+  /* position: fixed; */
+  /* bottom: 50%; */
+  /* right: 0px; */
+  z-index: 9999999999999;
 }
 
+.compact__container { 
+  position: fixed;
+  bottom: 50%;
+  right: 0px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px 5px rgba(41,41,42,.07);
+  width: 40px;
+  height: auto;
+  border-radius: 3px;
+  font-family: "Source Sans 3";
+  cursor: pointer;
+
+  &:hover { 
+    width: 45px;
+  }
+  
+
+  & .compact__wrapper { 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 14px 12px 12px;
+    & p { 
+      font-size: 13px;
+      margin: 0;
+      padding: 0;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+  }
+
+}
 
 .container { 
+  margin-right: 10px;
   font-family: "Source Sans 3";
   border-radius: 10px;
   box-shadow: 0 0 10px 5px rgba(41,41,42,.07);
@@ -15,6 +55,7 @@
   padding: 16px;
   width: unset;
   gap: 10px;
+  background-color: #FFF;
 
   & .top__wrapper { 
     display: flex;

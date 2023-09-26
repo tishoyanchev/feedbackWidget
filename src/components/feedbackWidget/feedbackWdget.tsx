@@ -10,11 +10,6 @@ import { Component, h, getAssetPath, State, Prop, Element } from '@stencil/core'
 
 export class FeedbackWidget {
   @Element() el;
-  @State() angryEmoji = "emojiAngry.png";
-  @State() emojiHeartEyes = "emojiHeartEyes.png";
-  @State() emojiNeutral = "emojiNeutral.png";
-  @State() emojiSad = "emojiSad.png";
-  @State() emojiSmile = "emojiSmile.png";
   @Prop() appName = "Product"
   @State() quetionsArray = [];
   @State() feedBackData = [];
@@ -24,6 +19,7 @@ export class FeedbackWidget {
   @State() phaseEnd: boolean = false;
   @State() textAreaIsActive: boolean = false;
   @State() textAreaData: string = ""
+  @State() isCompact: boolean = true;
 
   private questionOne = `How satisfied are you with the ${this.appName}'s value for money?`
   private questionTwo = `How satisfied are you with ${this.appName}'s ease of use?`
@@ -33,6 +29,7 @@ export class FeedbackWidget {
 
   componentWillLoad() { 
     this.quetionsArray.push(this.questionOne, this.questionTwo, this.questionThree, this.questionFour)
+    this.checkCookie()
   }
 
   handleProgressBar() { 
@@ -56,10 +53,9 @@ export class FeedbackWidget {
         this.phaseTwo = true;
         this.phaseOne = false;
       }
-  
+      this.handleProgressBar()
       this.feedBackData.push({question: this.quetionsArray[this.qIndex], rate: e.target.alt})
     }
-    this.handleProgressBar()
   }
 
   userInputText(e) { 
@@ -96,62 +92,123 @@ export class FeedbackWidget {
   }
 
   handleClosure() {
-    this.el.remove()
+    //this.el.remove()
+    this.isCompact = true;
   }
   
+  handleSameUser() { 
+
+  }
+
+  handleCompactContainer() { 
+    this.isCompact = false;
+  }
+
+  setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+
+  getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  checkCookie() {
+    let user = this.getCookie("username");
+    if (user != "") {
+      console.log('welcome back', user)
+      this.handleSameUser()
+    } else {
+      for(let i = 0; i < 19; ++i) user += Math.floor(Math.random() * 10);
+      if (user != "" && user != null) {
+        this.setCookie("username", user, 365);
+      }
+    }
+  }
+
+
+  
   render() {
-    const angryEmoji = getAssetPath(`../../assets/${this.angryEmoji}`);
-    const emojiHeartEyes = getAssetPath(`../../assets/${this.emojiHeartEyes}`);
-    const emojiNeutral = getAssetPath(`../../assets/${this.emojiNeutral}`);
-    const emojiSad = getAssetPath(`../../assets/${this.emojiSad}`);
-    const emojiSmile = getAssetPath(`../../assets/${this.emojiSmile}`);
+    const angryEmoji = getAssetPath(`../../assets/emojiAngry.png`);
+    const emojiHeartEyes = getAssetPath(`../../assets/emojiHeartEyes.png`);
+    const emojiNeutral = getAssetPath(`../../assets/emojiNeutral.png`);
+    const emojiSad = getAssetPath(`../../assets/emojiSad.png`);
+    const emojiSmile = getAssetPath(`../../assets/emojiSmile.png`);
 
  
     return (
-      <div class='container'>
-        <div class={`top__wrapper ${this.phaseEnd ? 'hide' : ""}`}>
-          {/* <div class="heading-label">Your feedback matters!</div> */}
-          <div class="progress-bar">
-            <div class="progress__bar-fill"></div>
-          </div>
-          <div class='close-button' onClick={() => this.handleClosure()}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" d="m13.5 2.5-11 11M2.5 2.5l11 11"/></svg>
-          </div>
-        </div>
-        <div class='bottom__wrapper'>
-          <div class={`phase__one ${!this.phaseOne ? 'hide' : ""}`}>
-            <div class='question-label'>
-              {this.quetionsArray[this.qIndex]}
-            </div>
-            <div class='rating-emojis' onClick={(e) => this.handleQuestionChange(e)}>
-                <img src={angryEmoji} alt="angry" />
-                <img src={emojiSad} alt="sad" />
-                <img src={emojiNeutral} alt="neutral" />
-                <img src={emojiSmile} alt="smile" />
-                <img src={emojiHeartEyes} alt="happy" />
-            </div>
-            <div class='rating-label'>
-              <div>Poor</div>
-              <div>Excellent</div>
-            </div>
-          </div>
-          <div class={`phase__two ${this.phaseTwo ? 'show' : ""}`}>
-            <div class='question-label'>
-              {this.questionFive}
-            </div>
-            <div class='text__input'>
-              <p class='hint__text'>Answer required</p>
-              <textarea onInput={(e) => this.userInputText(e)}></textarea>
-            </div>
-            <div class={`submit__button ${this.textAreaIsActive ? "active" : ""}`}>
-              <button disabled={!this.textAreaIsActive} onClick={() => this.handleSubmission()}>Submit</button>
-            </div>
-          </div>
-          <div class={`phase__end ${this.phaseEnd ? 'show' : ""}`}>
-            Thank you for taking part in our survey
+      this.isCompact 
+      ? <div class='compact__container' onClick={() => this.handleCompactContainer()}>
+        <div class='compact__wrapper'>
+          <p>Feedback</p>
+          <div class='compact-icon'>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M5.5 7.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.5 6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM5.5 9.5c-2.723 0-5 2.277-5 5h10c0-2.723-2.277-5-5-5ZM10.841 9a2.986 2.986 0 0 1 1.659-.5c2.342 0 3 2.087 3 4h-3"/></svg>
           </div>
         </div>
       </div>
+      : <div class='container'>
+      <div class={`top__wrapper ${this.phaseEnd ? 'hide' : ""}`}>
+        {/* <div class="heading-label">Your feedback matters!</div> */}
+        <div class="progress-bar">
+          <div class="progress__bar-fill"></div>
+        </div>
+        <div class='close-button' onClick={() => this.handleClosure()}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" d="m13.5 2.5-11 11M2.5 2.5l11 11"/></svg>
+        </div>
+      </div>
+      <div class='bottom__wrapper'>
+        <div class={`phase__one ${!this.phaseOne ? 'hide' : ""}`}>
+          <div class='question-label'>
+            {this.quetionsArray[this.qIndex]}
+          </div>
+          <div class='rating-emojis' onClick={(e) => this.handleQuestionChange(e)}>
+              <img src={angryEmoji} alt="angry" />
+              <img src={emojiSad} alt="sad" />
+              <img src={emojiNeutral} alt="neutral" />
+              <img src={emojiSmile} alt="smile" />
+              <img src={emojiHeartEyes} alt="happy" />
+          </div>
+          <div class='rating-label'>
+            <div>Poor</div>
+            <div>Excellent</div>
+          </div>
+        </div>
+        <div class={`phase__two ${this.phaseTwo ? 'show' : ""}`}>
+          <div class='question-label'>
+            {this.questionFive}
+          </div>
+          <div class='text__input'>
+            <p class='hint__text'>Answer required</p>
+            <textarea onInput={(e) => this.userInputText(e)}></textarea>
+          </div>
+          <div class={`submit__button ${this.textAreaIsActive ? "active" : ""}`}>
+            <button disabled={!this.textAreaIsActive} onClick={() => this.handleSubmission()}>Submit</button>
+          </div>
+        </div>
+        <div class={`phase__end ${this.phaseEnd ? 'show' : ""}`}>
+          Thank you for taking part in our survey
+        </div>
+      </div>
+    </div> 
     );
   }
+
+  static insertWidget() {
+    const widget = document.createElement('ifx-feedback-widget');
+    document.body.appendChild(widget);
+  }
+  
 }
