@@ -3,7 +3,7 @@ name: "publish npm"
 on: push
 
 jobs:
-  build:
+ publish:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
