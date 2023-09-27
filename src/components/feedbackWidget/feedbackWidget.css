@@ -1,16 +1,33 @@
 :host { 
-  display: inline-block;
-  /* position: fixed; */
-  /* bottom: 50%; */
-  /* right: 0px; */
+  /* display: inline-block; */
   z-index: 9999999999999;
 }
 
-.compact__container { 
+.main__container { 
   position: fixed;
   bottom: 50%;
   right: 0px;
 
+  & .container { 
+    position: fixed;
+    right: -100%;
+    bottom: 40%;
+    transition: .4s right;
+  }
+
+  &.open { 
+    & .compact__container { 
+      display: none;
+    }
+
+    & .container { 
+      right: 0;
+      transition: .4s right;
+    }
+  }
+}
+
+.compact__container { 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,9 +37,11 @@
   border-radius: 3px;
   font-family: "Source Sans 3";
   cursor: pointer;
+  transition: .1s padding;
 
   &:hover { 
-    width: 45px;
+    transition: .1s padding;
+    padding-right: 2px;
   }
   
 
@@ -50,8 +69,8 @@
   display: flex;
   flex-direction: column;
   max-height: 664px;
-  max-width: 304px;
-  min-width: 304px;
+  /* max-width: 304px; */
+  max-width: 250px;
   padding: 16px;
   width: unset;
   gap: 10px;
@@ -134,12 +153,13 @@
       & .rating-emojis  { 
         & img { 
           transition: width .2s;
-          width: 35px;
+          /* width: 35px; */
+          width: 30px;
   
           &:hover { 
             transition: width .2s ;
             cursor: pointer;
-            width: 40px;
+            width: 35px;
           }
         }
       }
@@ -246,6 +266,54 @@
       }
     }
   }
+}
 
 
+@media only screen and (max-width: 480px) { 
+
+  .main__container { 
+    position: fixed;
+    bottom: 10px;
+    right: 10px; 
+
+    & .container { 
+      position: fixed;
+      right: -150%;
+      bottom: 5px;
+      transition: .4s right;
+    }
+
+    &.open { 
+      & .compact__container { 
+        display: none;
+      }
+  
+      & .container { 
+        /* width: 100%; */
+        right: 16px;
+        transition: .4s right;
+      }
+    }
+  }
+
+  .compact__container { 
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+
+    & .compact__wrapper { 
+      display: flex;
+      justify-content: center;
+      padding: 0px;
+      line-height: 12px;
+      & p { 
+        display: none;
+      }
+    }
+
+    &:hover { 
+      transition: .1s padding;
+      padding: 0px
+    }
+  }
 }

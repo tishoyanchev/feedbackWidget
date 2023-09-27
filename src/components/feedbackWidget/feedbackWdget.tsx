@@ -89,6 +89,9 @@ export class FeedbackWidget {
     .catch((error) => {
       console.error('Error:', error);
     });
+
+    //here I need to invoke the 'set cookie' and set the cookie.
+    this.setCookie("username", 365)
   }
 
   handleClosure() {
@@ -97,18 +100,21 @@ export class FeedbackWidget {
   }
   
   handleSameUser() { 
-
+    //console.log(this.el)
+    this.el.style.display = 'none';
   }
 
   handleCompactContainer() { 
-    this.isCompact = false;
+    this.isCompact = false
   }
 
-  setCookie(cname, cvalue, exdays) {
+  setCookie(cname, exdays) {
+    let user = ""
+    for(let i = 0; i < 19; ++i) user += Math.floor(Math.random() * 10);
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    document.cookie = cname + "=" + user + ";" + expires + ";path=/";
   }
 
   getCookie(cname) {
@@ -130,12 +136,14 @@ export class FeedbackWidget {
     let user = this.getCookie("username");
     if (user != "") {
       console.log('welcome back', user)
+      //this means this user has presssed submit before, and therefore, feedback must not show
       this.handleSameUser()
     } else {
-      for(let i = 0; i < 19; ++i) user += Math.floor(Math.random() * 10);
-      if (user != "" && user != null) {
-        this.setCookie("username", user, 365);
-      }
+      //this means it's a new user who has not done the survey, and therefore feedback must be shown.
+      // for(let i = 0; i < 19; ++i) user += Math.floor(Math.random() * 10);
+      // if (user != "" && user != null) {
+      //   this.setCookie("username", user, 365);
+      // }
     }
   }
 
@@ -150,59 +158,60 @@ export class FeedbackWidget {
 
  
     return (
-      this.isCompact 
-      ? <div class='compact__container' onClick={() => this.handleCompactContainer()}>
-        <div class='compact__wrapper'>
-          <p>Feedback</p>
-          <div class='compact-icon'>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M5.5 7.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.5 6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM5.5 9.5c-2.723 0-5 2.277-5 5h10c0-2.723-2.277-5-5-5ZM10.841 9a2.986 2.986 0 0 1 1.659-.5c2.342 0 3 2.087 3 4h-3"/></svg>
+      <div class={`main__container ${!this.isCompact ? 'open' : ""}`}>
+          <div class='compact__container' onClick={() => this.handleCompactContainer()}>
+            <div class='compact__wrapper'>
+              <p>Feedback</p>
+              <div class='compact-icon'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" d="M5.5 7.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.5 6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM5.5 9.5c-2.723 0-5 2.277-5 5h10c0-2.723-2.277-5-5-5ZM10.841 9a2.986 2.986 0 0 1 1.659-.5c2.342 0 3 2.087 3 4h-3"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class='container'>
+        <div class={`top__wrapper ${this.phaseEnd ? 'hide' : ""}`}>
+          {/* <div class="heading-label">Your feedback matters!</div> */}
+          <div class="progress-bar">
+            <div class="progress__bar-fill"></div>
+          </div>
+          <div class='close-button' onClick={() => this.handleClosure()}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" d="m13.5 2.5-11 11M2.5 2.5l11 11"/></svg>
           </div>
         </div>
+        <div class='bottom__wrapper'>
+          <div class={`phase__one ${!this.phaseOne ? 'hide' : ""}`}>
+            <div class='question-label'>
+              {this.quetionsArray[this.qIndex]}
+            </div>
+            <div class='rating-emojis' onClick={(e) => this.handleQuestionChange(e)}>
+                <img src={angryEmoji} alt="angry" />
+                <img src={emojiSad} alt="sad" />
+                <img src={emojiNeutral} alt="neutral" />
+                <img src={emojiSmile} alt="smile" />
+                <img src={emojiHeartEyes} alt="happy" />
+            </div>
+            <div class='rating-label'>
+              <div>Poor</div>
+              <div>Excellent</div>
+            </div>
+          </div>
+          <div class={`phase__two ${this.phaseTwo ? 'show' : ""}`}>
+            <div class='question-label'>
+              {this.questionFive}
+            </div>
+            <div class='text__input'>
+              <p class='hint__text'>Answer required</p>
+              <textarea onInput={(e) => this.userInputText(e)}></textarea>
+            </div>
+            <div class={`submit__button ${this.textAreaIsActive ? "active" : ""}`}>
+              <button disabled={!this.textAreaIsActive} onClick={() => this.handleSubmission()}>Submit</button>
+            </div>
+          </div>
+          <div class={`phase__end ${this.phaseEnd ? 'show' : ""}`}>
+            Thank you for taking part in our survey
+          </div>
+        </div>
+          </div> 
       </div>
-      : <div class='container'>
-      <div class={`top__wrapper ${this.phaseEnd ? 'hide' : ""}`}>
-        {/* <div class="heading-label">Your feedback matters!</div> */}
-        <div class="progress-bar">
-          <div class="progress__bar-fill"></div>
-        </div>
-        <div class='close-button' onClick={() => this.handleClosure()}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" d="m13.5 2.5-11 11M2.5 2.5l11 11"/></svg>
-        </div>
-      </div>
-      <div class='bottom__wrapper'>
-        <div class={`phase__one ${!this.phaseOne ? 'hide' : ""}`}>
-          <div class='question-label'>
-            {this.quetionsArray[this.qIndex]}
-          </div>
-          <div class='rating-emojis' onClick={(e) => this.handleQuestionChange(e)}>
-              <img src={angryEmoji} alt="angry" />
-              <img src={emojiSad} alt="sad" />
-              <img src={emojiNeutral} alt="neutral" />
-              <img src={emojiSmile} alt="smile" />
-              <img src={emojiHeartEyes} alt="happy" />
-          </div>
-          <div class='rating-label'>
-            <div>Poor</div>
-            <div>Excellent</div>
-          </div>
-        </div>
-        <div class={`phase__two ${this.phaseTwo ? 'show' : ""}`}>
-          <div class='question-label'>
-            {this.questionFive}
-          </div>
-          <div class='text__input'>
-            <p class='hint__text'>Answer required</p>
-            <textarea onInput={(e) => this.userInputText(e)}></textarea>
-          </div>
-          <div class={`submit__button ${this.textAreaIsActive ? "active" : ""}`}>
-            <button disabled={!this.textAreaIsActive} onClick={() => this.handleSubmission()}>Submit</button>
-          </div>
-        </div>
-        <div class={`phase__end ${this.phaseEnd ? 'show' : ""}`}>
-          Thank you for taking part in our survey
-        </div>
-      </div>
-    </div> 
     );
   }
 
