@@ -17,3 +17,6 @@ jobs:
       # - run: npm run build
         env:
             NODE_AUTH_TOKEN: ${{secrets.IFX_FEEDBACK_WIDGET}}
+  build: 
+    - run: npm install 
+    - run: npm run build
