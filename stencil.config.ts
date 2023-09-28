@@ -12,7 +12,7 @@ export const config: Config = {
       copy: [
         {
           src: '**/*.{jpg,png}',
-          dest: 'dist/components/assets',
+          dest: 'dist/assets',
           warn: true,
         }
       ]
