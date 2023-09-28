@@ -1,23 +1,19 @@
-# When setting up node:
-- uses: actions/setup-node@v3
-  with:
-    node-version: '16.x'
-    registry-url: 'https://registry.npmjs.org' # <-- the registry-url here is required
+name: "publish npm"
 
-# ...[build & test etc]...
+on: push
 
-# Bump the version & push (if you're not doing that elsewhere)
-- name: Bump version & push
-  run: |
-    git config --global user.name 'Automated publish'
-    git config --global user.email '$TISHOYANCHEV@users.noreply.github.com'
-
-    # Update the version in package.json, and commit & tag the change:
-    npm version patch # YMMV - you might want the semver level as a workflow input
-
-    git push && git push --tags
-
-# Publish the result to npm with your granular token:
-- run: npm publish
-  env:
-    NODE_AUTH_TOKEN: ${{ secrets.IFX_FEEDBACK_WIDGET }}
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout
+              uses: actions/checkout@v2
+            - name: node
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 12
+                  registry-url: https://registry.npmjs.org
+           - name: Build library
+              run: |
+                npm ci
+                npm run build
