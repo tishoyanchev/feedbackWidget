@@ -114,6 +114,7 @@ export class FeedbackWidget {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires="+d.toUTCString();
+    console.log('cname', cname, 'exdays', exdays)
     document.cookie = cname + "=" + user + ";" + expires + ";path=/";
   }
 
@@ -134,27 +135,22 @@ export class FeedbackWidget {
 
   checkCookie() {
     let user = this.getCookie("username");
+    console.log('user inside checkCookie', user)
     if (user != "") {
       console.log('welcome back', user)
       //this means this user has presssed submit before, and therefore, feedback must not show
       this.handleSameUser()
-    } else {
-      //this means it's a new user who has not done the survey, and therefore feedback must be shown.
-      // for(let i = 0; i < 19; ++i) user += Math.floor(Math.random() * 10);
-      // if (user != "" && user != null) {
-      //   this.setCookie("username", user, 365);
-      // }
-    }
+    } 
   }
 
 
   
   render() {
-    const angryEmoji = getAssetPath(`../../assets/emojiAngry.png`);
-    const emojiHeartEyes = getAssetPath(`../../assets/emojiHeartEyes.png`);
-    const emojiNeutral = getAssetPath(`../../assets/emojiNeutral.png`);
-    const emojiSad = getAssetPath(`../../assets/emojiSad.png`);
-    const emojiSmile = getAssetPath(`../../assets/emojiSmile.png`);
+    const angryEmoji = getAssetPath(`../assets/emojiAngry.png`);
+    const emojiHeartEyes = getAssetPath(`../assets/emojiHeartEyes.png`);
+    const emojiNeutral = getAssetPath(`../assets/emojiNeutral.png`);
+    const emojiSad = getAssetPath(`../assets/emojiSad.png`);
+    const emojiSmile = getAssetPath(`../assets/emojiSmile.png`);
 
  
     return (
