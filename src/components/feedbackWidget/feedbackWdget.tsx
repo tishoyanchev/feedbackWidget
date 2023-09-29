@@ -70,8 +70,8 @@ export class FeedbackWidget {
     this.phaseEnd = true;
     this.feedBackData.push({freeText: this.textAreaData})
 
-    const url = 'https://example.com/api';
-    const dataArray = this.feedBackData;
+    // const url = 'https://example.com/api';
+    // const dataArray = this.feedBackData;
  
     // const requestOptions = {
     //   method: 'POST',
