@@ -73,23 +73,23 @@ export class FeedbackWidget {
     const url = 'https://example.com/api';
     const dataArray = this.feedBackData;
  
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', 
-      },
-      body: JSON.stringify(dataArray), 
-    };
-    fetch(url, requestOptions)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-
+    // const requestOptions = {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json', 
+    //   },
+    //   body: JSON.stringify(dataArray), 
+    // };
+    // fetch(url, requestOptions)
+    // .then((response) => {
+    //   if (!response.ok) {
+    //     throw new Error('Network response was not ok');
+    //   }
+    // })
+    // .catch((error) => {
+    //   console.error('Error:', error);
+    // });
+    console.log('before set cookie')
     //here I need to invoke the 'set cookie' and set the cookie.
     this.setCookie("username", 365)
   }
