@@ -1,5 +1,4 @@
 import { Component, h, getAssetPath, State, Prop, Element } from '@stencil/core';
-// import myImage from '../../assets/emojiAngry.png'
 
 @Component({
   tag: 'ifx-feedback-widget',
@@ -69,6 +68,7 @@ export class FeedbackWidget {
     this.phaseTwo = false;
     this.phaseEnd = true;
     this.feedBackData.push({freeText: this.textAreaData})
+    this.feedBackData.push({domain: window.location.hostname, appName: this.appName})
 
     // const url = 'https://example.com/api';
     // const dataArray = this.feedBackData;
@@ -89,18 +89,14 @@ export class FeedbackWidget {
     // .catch((error) => {
     //   console.error('Error:', error);
     // });
-    console.log('before set cookie')
-    //here I need to invoke the 'set cookie' and set the cookie.
-    this.setCookie("username", 365)
+    this.setCookie();
   }
 
   handleClosure() {
-    //this.el.remove()
     this.isCompact = true;
   }
   
   handleSameUser() { 
-    //console.log(this.el)
     this.el.style.display = 'none';
   }
 
@@ -108,43 +104,20 @@ export class FeedbackWidget {
     this.isCompact = false
   }
 
-  setCookie(cname, exdays) {
-    let user = ""
-    for(let i = 0; i < 19; ++i) user += Math.floor(Math.random() * 10);
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires="+d.toUTCString();
-    console.log('cname', cname, 'exdays', exdays)
-    document.cookie = cname + "=" + user + ";" + expires + ";path=/";
-  }
-
-  getCookie(cname) {
-    let name = cname + "=";
-    let ca = document.cookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
+  setCookie() {
+    let user = "";
+    for (let i = 0; i < 19; ++i) user += Math.floor(Math.random() * 10);
+    localStorage.setItem('username', user);
   }
 
   checkCookie() {
-    let user = this.getCookie("username");
-    console.log('user inside checkCookie', user)
-    if (user != "") {
-      console.log('welcome back', user)
-      //this means this user has presssed submit before, and therefore, feedback must not show
-      this.handleSameUser()
-    } 
+    let user = localStorage.getItem('username');
+    if (user !== null) {
+      this.handleSameUser();
+    }
   }
 
 
-  
   render() {
     const angryEmoji = getAssetPath(`../assets/emojiAngry.png`);
     const emojiHeartEyes = getAssetPath(`../assets/emojiHeartEyes.png`);
